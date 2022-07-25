@@ -10,7 +10,7 @@ const Navbar = () => {
         "Divided",
         "남성",
         "신생아/유아",
-        "Sale"
+        "dddddd"
     ];
 
     const navigate = useNavigate();
