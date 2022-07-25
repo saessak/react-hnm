@@ -1,23 +1,22 @@
-import logo from './logo.svg';
+import {useState} from 'react'
+import {Routes, Route} from "react-router-dom"
 import './App.css';
+import ProductAll from "./page/ProductAll"
+import Login from "./page/Login"
+import ProductDetail from "./page/ProductDetail"
+import Navbar from "./components/Navbar";
 
 function App() {
+  const[authenticate, setAuthenticate] = useState(false); //ture:로그인상태, false:로그아웃 상태
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<ProductAll />} />
+        <Route path="/login" element={<Login setAuthenticate={setAuthenticate}/>} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+      </Routes>
     </div>
   );
 }
