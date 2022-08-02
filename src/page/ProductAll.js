@@ -1,51 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ProductCard from "../components/ProductCard";
-import { Row, Col, Container, Alert } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
+import {productAction} from '../redux/actions/productAction';
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductAll = () => {
-  let [products, setProducts] = useState([]);
+  const productList = useSelector((state) => state.product.productList); //reducers/index.js 에서 product리듀서에 있는 State를 읽어옴.
   const [query, setQuery] = useSearchParams();
-  let [error, setError] = useState("");
+  const dispatch = useDispatch();
+  console.log("상품?",productList)
 
-  const getProducts = async () => {
-    try {
-      let keyword = query.get("q") || "";
-      let url = `https://my-json-server.typicode.com/saessak/noona_hnm_DB/products?q=${keyword}`;
-      let response = await fetch(url);
-      let data = await response.json();
-      if (data.length < 1) {
-        if (keyword !== "") {
-          setError(`${keyword}와 일치하는 상품이 없습니다`);
-        } else {
-          throw new Error("결과가 없습니다");
-        }
-      }
-      setProducts(data);
-    } catch (err) {
-      setError(err.message);
-    }
+  const getProducts = () => {
+    let searchQuery = query.get("q") || "";
+    console.log("쿼리값은?", searchQuery);
+    dispatch(productAction.getProducts(searchQuery));
   };
 
   useEffect(() => {
     getProducts();
   }, [query]);
+
   return (
     <Container>
-      {error ? (
-        <Alert variant="danger" className="text-center">
-          {error}
-        </Alert>
-      ) : (
-        <Row>
-          {products.length > 0 &&
-            products.map((item) => (
-              <Col md={3} sm={12} key={item.id}>
-                <ProductCard item={item} />
-              </Col>
-            ))}
-        </Row>
-      )}
+      <Row>
+      {productList.map((item) => (
+        <Col md={3} sm={12} key={item.id}>
+          <ProductCard item={item} />
+        </Col>
+      ))}
+      </Row>
     </Container>
   );
 };
