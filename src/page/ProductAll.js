@@ -6,14 +6,12 @@ import {productAction} from '../redux/actions/productAction';
 import { useDispatch, useSelector } from "react-redux";
 
 const ProductAll = () => {
-  const productList = useSelector((state) => state.product.productList); //reducers/index.js 에서 product리듀서에 있는 State를 읽어옴.
+  const productList = useSelector((state) => state.product.productList); //store 에서 product리듀서에 있는 State를 읽어옴.
   const [query, setQuery] = useSearchParams();
   const dispatch = useDispatch();
-  console.log("상품?",productList)
 
   const getProducts = () => {
     let searchQuery = query.get("q") || "";
-    console.log("쿼리값은?", searchQuery);
     dispatch(productAction.getProducts(searchQuery));
   };
 

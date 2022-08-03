@@ -4,15 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authenticateAction } from "../redux/actions/authenticateAction";
 
-const Login = ({ setAuthenticate }) => {
+const Login = () => {
   const [id,setId] = useState('');
-  const [password,setPassword] = useState('');
+  const [password,setPassword] = useState(''); 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const login = (event) => {
     event.preventDefault();
-    setAuthenticate(true);
-    dispatch(authenticateAction.login(id,password));
+    dispatch(authenticateAction.login(id,password)); //action에 로그인정보 보냄
     navigate("/");
   };
   return (

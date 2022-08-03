@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Button, Dropdown, Alert } from "react-bootstrap";
+import { Container, Row, Col, Button, Dropdown } from "react-bootstrap";
+import {productAction} from '../redux/actions/productAction';
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductDetail = () => {
-  const [product, setProduct] = useState(null);
+  const product = useSelector((state) => state.product.selectedItem); //product 리듀서에서 selectedItem의 state값 가져오기
   const [loading, setLoading] = useState(false);
-  const { id } = useParams();
-  const getProductDetail = async () => {
+  const { id } = useParams(); //현재 url의 파라미터값
+  const dispatch = useDispatch();
+  const getProductDetail = () => {
     setLoading(true);
-    let url = `https://my-json-server.typicode.com/saessak/noona_hnm_DB/products/${id}`;
-    let response = await fetch(url);
-    let data = await response.json();
+    dispatch(productAction.getProductDetail(id)); //productAction.getProductDetail에 id값 전달
     setLoading(false);
-
-    setProduct(data);
   };
   useEffect(() => {
     getProductDetail();
-  }, []);
-  if (loading || product == null) return <h1>Loading</h1>;
+  }, []); //해당 컴포넌트로 올때마다 실행
+  
+  if (loading || product == null) return <h1>Loading</h1>; //현재 loding이거나 제품이 없는경우 Loading 노출
   return (
     <Container className="product-detail-card">
       <Row>

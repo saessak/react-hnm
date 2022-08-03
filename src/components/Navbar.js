@@ -4,7 +4,11 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBars, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-const Navbar = ({ authenticate, setAuthenticate }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { authenticateAction } from "../redux/actions/authenticateAction";
+
+const Navbar = () => {
+  const authenticate = useSelector((state) => state.auth.authenticate); //auth라는 이름을 가진 reducer에서 authenticate의 state값을 가져온다.
   const menuList = [
     "여성",
     "Divided",
@@ -16,12 +20,20 @@ const Navbar = ({ authenticate, setAuthenticate }) => {
     "지속가능성",
   ];
   let [width, setWidth] = useState(0);
+  const dispatch = useDispatch();
   let navigate = useNavigate();
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
       navigate(`?q=${event.target.value}`);
     }
   };
+
+  const logout = (event) => {
+    event.preventDefault();
+    dispatch(authenticateAction.logout); //action에 
+    navigate("/login");
+  };
+
   return (
     <div>
       <div className="side-menu" style={{ width: width }}>
@@ -38,8 +50,8 @@ const Navbar = ({ authenticate, setAuthenticate }) => {
         <div className="burger-menu hide">
           <FontAwesomeIcon icon={faBars} onClick={() => setWidth(250)} />
         </div>
-        {authenticate ? (
-          <div onClick={() => setAuthenticate(false)}>
+        {authenticate ? ( //authenticate의 값이 ture이면 로그아웃 노출, 아니면 로그인 노출
+          <div onClick={logout}>
             <FontAwesomeIcon icon={faUser} /> 
             <span>로그아웃</span>
           </div>
